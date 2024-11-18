@@ -3,12 +3,22 @@ entries:
   nginx-app:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2024-11-16T22:42:18.838978047Z"
+    created: "2024-11-18T19:21:20.874227038Z"
+    description: A Helm chart for Kubernetes
+    digest: 39bd938b84f1e75c380178793de2f626504b7447ed07e91b54368691c672ce23
+    name: nginx-app
+    type: application
+    urls:
+    - https://x23186925-thesis-helm-charts.s3.amazonaws.com/nginx-app-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2024-11-18T19:21:20.872668804Z"
     description: A Helm chart for Kubernetes
     digest: 869b94e8a2e0f9c6b631803dfb02eb815ef5a1800127606998ab706d2bae6a31
     name: nginx-app
     type: application
     urls:
-    - https://x23186925-helm.s3.amazonaws.com/nginx-app-0.1.0.tgz
+    - https://x23186925-thesis-helm-charts.s3.amazonaws.com/nginx-app-0.1.0.tgz
     version: 0.1.0
-generated: "2024-11-16T22:42:18.838264744Z"
+generated: "2024-11-18T19:21:20.872270868Z"

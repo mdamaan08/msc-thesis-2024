@@ -1,0 +1,40 @@
+[OK] my-releas-nginx-app apps/v1/Deployment
+[OK] my-releas-nginx-app apps/v1/Deployment
+[SKIPPED] my-releas-nginx-app apps/v1/Deployment: Skipped because container-ephemeral-storage-request-equals-limit is ignored
+[SKIPPED] my-releas-nginx-app apps/v1/Deployment: Skipped because container-ports-check is ignored
+[CRITICAL] my-releas-nginx-app apps/v1/Deployment: (nginx) The pod has a container with a writable root filesystem
+[OK] my-releas-nginx-app apps/v1/Deployment: Pod Topology Spread Constraints
+[SKIPPED] my-releas-nginx-app apps/v1/Deployment: Skipped because container-cpu-requests-equal-limits is ignored
+[SKIPPED] my-releas-nginx-app apps/v1/Deployment: Skipped because container-memory-requests-equal-limits is ignored
+[OK] my-releas-nginx-app apps/v1/Deployment: Container is missing a livenessProbe
+[OK] my-releas-nginx-app apps/v1/Deployment
+[SKIPPED] my-releas-nginx-app apps/v1/Deployment: Skipped because container-resource-requests-equal-limits is ignored
+[OK] my-releas-nginx-app apps/v1/Deployment
+[OK] my-releas-nginx-app apps/v1/Deployment
+[OK] my-releas-nginx-app apps/v1/Deployment
+[OK] my-releas-nginx-app apps/v1/Deployment
+[CRITICAL] my-releas-nginx-app apps/v1/Deployment: (nginx) The container is running with a low user ID
+[CRITICAL] my-releas-nginx-app apps/v1/Deployment: (nginx) The container running with a low group ID
+[SKIPPED] my-releas-nginx-app apps/v1/Deployment: Skipped because container-seccomp-profile is ignored
+[CRITICAL] my-releas-nginx-app apps/v1/Deployment: (nginx) Image with latest tag
+[OK] my-releas-nginx-app apps/v1/Deployment
+[OK] my-releas-nginx-app apps/v1/Deployment
+[SKIPPED] my-releas-nginx-app apps/v1/Deployment: Skipped as the Deployment is controlled by a HorizontalPodAutoscaler
+[OK] my-releas-nginx-app apps/v1/Deployment
+[WARNING] my-releas-nginx-app apps/v1/Deployment: Deployment does not have a host podAntiAffinity set
+[OK] my-releas-nginx-app apps/v1/Deployment
+[OK] my-releas-nginx-app apps/v1/Deployment
+[OK] my-releas-nginx-app-hpa autoscaling/v2/HorizontalPodAutoscaler
+[OK] my-releas-nginx-app-hpa autoscaling/v2/HorizontalPodAutoscaler
+[OK] my-releas-nginx-app-hpa autoscaling/v2/HorizontalPodAutoscaler
+[WARNING] my-releas-nginx-app-hpa autoscaling/v2/HorizontalPodAutoscaler: HPA few replicas
+[OK] my-releas-nginx-app-network-policy networking.k8s.io/v1/NetworkPolicy
+[OK] my-releas-nginx-app-network-policy networking.k8s.io/v1/NetworkPolicy
+[OK] my-releas-nginx-app-network-policy networking.k8s.io/v1/NetworkPolicy
+[OK] my-releas-nginx-app-pdb policy/v1/PodDisruptionBudget
+[OK] my-releas-nginx-app-pdb policy/v1/PodDisruptionBudget
+[OK] my-releas-nginx-app-pdb policy/v1/PodDisruptionBudget
+[OK] my-releas-nginx-app v1/Service
+[OK] my-releas-nginx-app v1/Service
+[WARNING] my-releas-nginx-app v1/Service: The service is of type NodePort
+[OK] my-releas-nginx-app v1/Service

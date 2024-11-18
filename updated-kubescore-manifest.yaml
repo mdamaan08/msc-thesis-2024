@@ -1,0 +1,120 @@
+---
+# Source: nginx-app/templates/networkpolicy.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: my-releas-nginx-app-network-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: nginx
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - podSelector: {}  # Adjust according to your requirements
+  egress:
+  - to:
+    - podSelector: {}  # Adjust according to your requirements
+---
+# Source: nginx-app/templates/pdb.yaml
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: my-releas-nginx-app-pdb
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: nginx
+---
+# Source: nginx-app/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: my-releas-nginx-app
+  labels:
+    app.kubernetes.io/name: nginx-app
+    app.kubernetes.io/instance: my-releas
+    app.kubernetes.io/version: 1.16.0
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: nginx-app/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-releas-nginx-app
+spec:
+  type: NodePort  # Update `Values.yaml` to set this to ClusterIP or LoadBalancer if possible
+  selector:
+    app: nginx
+  ports:
+    - port: 80
+      targetPort: 8000
+      nodePort: 30009
+---
+# Source: nginx-app/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-releas-nginx-app
+  labels:
+    app: nginx
+spec:
+  # replicas: 3  # Leave out if using HPA
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: 250738637992.dkr.ecr.eu-west-1.amazonaws.com/x23186925-thesis:latest
+        ports:
+        - containerPort: 8000
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 3000
+          allowPrivilegeEscalation: false
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+            ephemeral-storage: "1Gi"
+          limits:
+            cpu: "1000m"
+            memory: "1024Mi"
+            ephemeral-storage: "2Gi"
+      imagePullSecrets:
+      - name: ecr-secret
+---
+# Source: nginx-app/templates/hpa.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: my-releas-nginx-app-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: my-releas-nginx-app
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+

@@ -3,10 +3,11 @@ kind: Service
 metadata:
   name: {{ include "nginx-app.fullname" . }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.service.type }}  # Update `Values.yaml` to set this to ClusterIP or LoadBalancer if possible
   selector:
     app: {{ .Values.appName }}
   ports:
     - port: {{ .Values.service.port }}
       targetPort: {{ .Values.containerPort }}
       nodePort: {{ .Values.service.nodePort }}
+
