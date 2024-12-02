@@ -1,0 +1,7 @@
+organization=msc-thesis
+projectKey=mdamaan08_msc-thesis-2024
+serverUrl=https://sonarcloud.io
+serverVersion=8.0.0.58332
+dashboardUrl=https://sonarcloud.io/dashboard?id=mdamaan08_msc-thesis-2024
+ceTaskId=AZOJPb9m3v9VhC9ZGuyX
+ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AZOJPb9m3v9VhC9ZGuyX
