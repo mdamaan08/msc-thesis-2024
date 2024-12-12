@@ -1,0 +1,79 @@
+pipeline {
+    agent any
+    environment {
+            AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID"
+            AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY"
+            AWS_SESSION_TOKEN="$AWS_SESSION_TOKEN"
+            PATH = "${env.PATH}:/opt/sonar-scanner/bin"
+    }
+
+    stages {
+        stage('Perform AWS Actions') {
+            steps {
+                withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_TOKEN')]) {
+                    sh '''
+                        aws sts get-caller-identity
+                        aws eks --region eu-west-1 update-kubeconfig --name x23186925-thesis
+                        git clone https://$GITHUB_TOKEN@github.com/mdamaan08/msc-thesis-2024.git
+                       
+                        #kubectl apply -f /var/lib/jenkins/workspace/testt/msc-thesis/Deployment.yml
+                        #kubectl apply -f /var/lib/jenkins/workspace/testt/msc-thesis/service.yml
+                    '''
+                }
+            }
+        }
+        
+        stage('Static Analysis of Code'){
+            steps{
+                sh '''
+                        cd /var/lib/jenkins/workspace/testt/msc-thesis-2024
+                        sonar-scanner
+                '''
+            }
+        }
+        
+        
+        stage('ECR Authentication'){
+            steps{
+                sh '''
+                        aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 250738637992.dkr.ecr.eu-west-1.amazonaws.com
+                        cd /var/lib/jenkins/workspace/testt/msc-thesis-2024/examples/python-web-app
+                '''
+            }
+        }
+
+        stage('Docker Image build and publishing'){
+            steps{
+                sh '''
+                        cd /var/lib/jenkins/workspace/testt/msc-thesis-2024/examples/python-web-app
+                        docker build -t x23186925-thesis .
+                        docker tag x23186925-thesis:latest 250738637992.dkr.ecr.eu-west-1.amazonaws.com/x23186925-thesis:latest
+                        docker push 250738637992.dkr.ecr.eu-west-1.amazonaws.com/x23186925-thesis:latest
+                        #kubectl apply -f /var/lib/jenkins/workspace/testt/msc-thesis/Deployment.yml
+                        #kubectl apply -f /var/lib/jenkins/workspace/testt/msc-thesis/service.yml
+                '''
+            }
+        }
+        
+        stage('Helm configuration check'){
+            steps{
+                sh '''
+                        cd /var/lib/jenkins/workspace/testt/msc-thesis-2024
+                        helm get manifest my-releas -n default > updated-kubescore-manifest22222.yaml
+                        kube-score score updated-kubescore-manifest22222.yaml --output-format ci > updated-kube-score-results22222.txt
+                        aws s3 cp updated-kube-score-results.txt s3://x23186925-kubescore-results
+                '''
+            }
+        }
+        
+        stage('Deployment using helm'){
+            steps{
+                sh '''
+                        helm repo add my-s3-repo https://x23186925-thesis-helm-charts.s3.amazonaws.com
+                        helm repo update
+                        helm upgrade my-releas my-s3-repo/nginx-app --version 0.4.0
+                '''
+            }
+        }
+    }
+}
